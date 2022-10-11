@@ -18,6 +18,14 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    //  my code
+    const fileExtension = file.split('.').pop()
+    if (fileExtension === png || fileExtension === jpeg ||
+        fileExtension === jpg || fileExtension === pdf) {
+         // find lines who send files 
+        }
+    else { this.document.querySelector(".error-extension-file").style.display = "block"}
+    //
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
@@ -40,6 +48,7 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
+
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
