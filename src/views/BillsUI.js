@@ -20,10 +20,10 @@ const row = (bill) => {
     `)
   }
 
-const rows = (data) => {
-     const sortedData = data.sort((first, second)=> {
-      let firstDate = new Date(first.date), secondDate = new Date(second.date)
-      return secondDate - firstDate
+  const rows = (data) => {
+  const sortedData = data.sort((first, second)=> {
+   let firstDate = new Date(first.date), secondDate = new Date(second.date)
+   return secondDate - firstDate
      })
   return (data && data.length) ? sortedData.map(bill => row(bill)).join("") : ""
 }
