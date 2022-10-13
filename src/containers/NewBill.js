@@ -24,11 +24,9 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-    //  my code
     const fileExtension = fileName.split('.').pop()
     if (fileExtension === 'png' || fileExtension === 'jpeg' || fileExtension === 'jpg') {
         this.document.querySelector(".error-extension-file").style.display = "none"
-    //
         this.store
         .bills()
           .create({

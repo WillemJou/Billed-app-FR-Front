@@ -145,7 +145,6 @@ export const filteredBills = (data, status) => {
       console.log(this.index)
     }
     // display bills resolution bug
-    console.log(bills)
     filteredBills(bills, getStatus(this.index)).forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
