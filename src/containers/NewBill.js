@@ -62,7 +62,6 @@ export default class NewBill {
       commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
       fileUrl: this.fileUrl,
       fileName: this.fileName,
-    
       status: 'pending'
     }
     
@@ -80,7 +79,7 @@ export default class NewBill {
         this.onNavigate(ROUTES_PATH['Bills'])
       })
       .catch(error => {
-        alert("Votre justificatif doit être au format jpg, jpeg,  ou png.")
+        alert("Votre justificatif doit être au format jpg, jpeg, ou png.")
         console.error(error)
       })
     }

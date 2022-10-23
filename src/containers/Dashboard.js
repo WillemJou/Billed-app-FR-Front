@@ -67,7 +67,7 @@ export const filteredBills = (data, status) => {
         }
         
         export default class {
-          constructor({ document, onNavigate, store, bills, localStorage }) {
+          constructor({ document, store, bills, localStorage }) {
             this.document = document
             this.onNavigate = onNavigate
             this.store = store

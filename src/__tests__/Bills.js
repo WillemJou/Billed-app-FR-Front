@@ -35,6 +35,7 @@ describe("Given I am connected as an employee", () => {
       const windowIcon = screen.getByTestId("icon-window")
       expect(windowIcon.className.includes("active-icon")).toBeTruthy()
     })
+    
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen
