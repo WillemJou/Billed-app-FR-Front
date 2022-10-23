@@ -113,3 +113,14 @@ tr td:nth-of-type(5) {
 .bill-proof-container {
   overflow: scroll;
 }
+
+.flex-rows-dashboard, #link-download-dashboard {
+  display: flex;
+  gap: 22%;
+}
+
+.flex-rows-bills, #link-download-bills {
+  display: flex;
+  gap: 50%;
+}
+

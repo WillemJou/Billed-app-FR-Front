@@ -13,9 +13,14 @@ export default class {
     if (buttonNewBill)
       buttonNewBill.addEventListener("click", this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
+    const iconDownload = document.querySelectorAll(`div[data-testid="icon-download"]`)
     if (iconEye)
       iconEye.forEach((icon) => {
         icon.addEventListener("click", () => this.handleClickIconEye(icon))
+      })
+    if (iconDownload)
+      iconDownload.forEach((icon) => {
+        icon.addEventListener("click", () => this.handleClickDownloadFile(icon))
       })
     new Logout({ document, localStorage, onNavigate })
   }
@@ -28,11 +33,21 @@ export default class {
     const billUrl = icon.getAttribute("data-bill-url")
     const imgWidth = Math.floor($("#modaleFile").width() * 0.5)
     $("#modaleFile")
-      .find(".modal-body")
-      .html(
-        `<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} alt="Bill" /></div>`
+    .find(".modal-body")
+    .html(
+      `<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} alt="Bill" /></div>`
       )
-    $("#modaleFile").modal("show")
+      $("#modaleFile").modal("show")
+    }
+    
+    handleClickDownloadFile = (downloadIcon) => {
+      const billUrl = downloadIcon.getAttribute("data-bill-url")
+      console.log(billUrl);
+      $(document).ready(function () {
+        $("#link-download-bills").each(function(){
+          window.location.href = billUrl
+        });
+      })
   }
 
   getBills = () => {

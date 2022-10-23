@@ -2,9 +2,10 @@ import VerticalLayout from './VerticalLayout.js'
 import ErrorPage from "./ErrorPage.js"
 import LoadingPage from "./LoadingPage.js"
 
-import Actions from './Actions.js'
+import {eyeIcon, downloadIconBlue} from './Actions.js'
 
 const row = (bill) => {
+  console.log(bill.fileUrl);
   return (`
     <tr>
       <td>${bill.type}</td>
@@ -13,7 +14,10 @@ const row = (bill) => {
       <td>${bill.amount} €</td>
       <td>${bill.status}</td>
       <td>
-        ${Actions(bill.fileUrl)}
+        <div class="flex-rows-bills">
+        ${eyeIcon(bill.fileUrl)}
+        <a id="link-download-bills">${downloadIconBlue(bill.fileUrl)}</a>
+        </div>
       </td>
     </tr>
     `)
