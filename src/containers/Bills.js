@@ -42,7 +42,6 @@ export default class {
     
     handleClickDownloadFile = (downloadIcon) => {
       const billUrl = downloadIcon.getAttribute("data-bill-url")
-      console.log(billUrl);
       $(document).ready(function () {
         $("#link-download-bills").each(function(){
           window.location.href = billUrl

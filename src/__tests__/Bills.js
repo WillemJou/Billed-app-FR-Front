@@ -7,29 +7,33 @@ import userEvent from '@testing-library/user-event'
 import BillsUI from "../views/BillsUI.js"
 import Bills from "../containers/Bills.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH } from "../constants/routes.js"
+import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import mockStore from "../__mocks__/store"
 import router from "../app/Router.js"
 
 jest.mock("../app/store", () => mockStore)
 
+
 describe("Given I am connected as an employee", () => {
+  beforeEach(() => {
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    })
+    window.localStorage.setItem(
+      "user",
+      JSON.stringify({
+        type: "Employee",
+      })
+    )
+    const root = document.createElement("div")
+    root.setAttribute("id", "root")
+    document.body.append(root)
+    router()
+  })
+
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
-      Object.defineProperty(window, "localStorage", {
-        value: localStorageMock,
-      })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId("icon-window"))
       const windowIcon = screen.getByTestId("icon-window")
@@ -48,15 +52,9 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
-})
 
-describe('Given I am connected as Employee and I am on Bills page', () => {
   describe('When I click on the icon eye', () => {
     test('A modal should open', () => {
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
       document.body.innerHTML = BillsUI({data: bills})
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -71,14 +69,53 @@ describe('Given I am connected as Employee and I am on Bills page', () => {
       eye.addEventListener('click', handleClickIconEye)
       userEvent.click(eye)
       expect(handleClickIconEye).toHaveBeenCalled()
-
      expect(mockModal).toHaveBeenCalled()
     })
   })
-})
+
+   describe("When I am on Bills Page", () => {
+    test("Then I can navigate to NewBill", async () => {
+      document.body.innerHTML = BillsUI({ data: bills })
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+        const bill = new Bills({
+          document,
+          onNavigate,
+          store: null,
+          localStorage: window.localStorage
+        })
+        const button = screen.getByTestId('btn-new-bill')
+        const handleClickNewBill = jest.fn((e)=> bills.handleClickNewBill(e))
+        button.click('click', handleClickNewBill)
+        userEvent.click(button)
+        expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy()
+    })
+  })
+
+  describe('When I click on the icon download', () => {
+    test('downloading with the good URL', () => {
+      document.body.innerHTML = BillsUI({data: bills})
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      
+      const billsTable = new Bills({
+        document, onNavigate, store: bills, localStorage: window.localStorage
+      })
+      const downloadIcon = screen.getAllByTestId('icon-download')[0]
+      const handleClickDownload = jest.fn(billsTable.handleClickDownloadFile(downloadIcon))
+      const billUrl = downloadIcon.getAttribute("data-bill-url")
+      console.log(billUrl)
+      const urlTest = "http://localhost:5678/public\dc45f22af26fb9fbf8bca13962ce5238"
+      downloadIcon.addEventListener('click', handleClickDownload)
+      userEvent.click(downloadIcon)
+      expect(handleClickDownload).toHaveBeenCalled()
+   
+    })
+  })
 
 // integration test GET
-describe("Given I am a user connected as Employee", () => {
   describe("When I navigate to Bills", () => {
     test("fetches bills from mock API GET", async () => {
       localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
@@ -135,6 +172,6 @@ describe("Given I am a user connected as Employee", () => {
       expect(message).toBeTruthy()
       })
     })
-  })
+})
   
   

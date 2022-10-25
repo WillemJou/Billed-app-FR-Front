@@ -67,7 +67,7 @@ export const filteredBills = (data, status) => {
         }
         
         export default class {
-          constructor({ document, store, bills, localStorage }) {
+          constructor({ document, onNavigate, store, bills, localStorage }) {
             this.document = document
             this.onNavigate = onNavigate
             this.store = store
@@ -140,6 +140,7 @@ export const filteredBills = (data, status) => {
   }
   
   handleShowTickets(e, bills, index) {
+    e.preventDefault()
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {

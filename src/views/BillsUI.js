@@ -5,7 +5,6 @@ import LoadingPage from "./LoadingPage.js"
 import {eyeIcon, downloadIconBlue} from './Actions.js'
 
 const row = (bill) => {
-  console.log(bill.fileUrl);
   return (`
     <tr>
       <td>${bill.type}</td>
@@ -24,12 +23,9 @@ const row = (bill) => {
   }
 
   const rows = (data) => {
-  const sortedData = data.sort((first, second)=> {
-   let firstDate = new Date(first.date), secondDate = new Date(second.date)
-   return secondDate - firstDate
-     })
-  return (data && data.length) ? sortedData.map(bill => row(bill)).join("") : ""
-}
+    const antiChrono = (a, b) => ((a.date < b.date) ? 1 : -1)
+    return (data && data.length) ? data.sort(antiChrono).map(bill => row(bill)).join("") : ""
+  }
 
 export default ({ data: bills, loading, error }) => {
   
