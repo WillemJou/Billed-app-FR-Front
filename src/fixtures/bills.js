@@ -1,7 +1,7 @@
 export const bills = [{
   "id": "47qAXb6fIm2zOKkLzMro",
   "vat": "80",
-  "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
+  "fileUrl":"http://localhost:5678/public/976fbc50929ab2852a517ff682c603f5",
   "status": "pending",
   "type": "Hôtel et logement",
   "commentary": "séminaire billed",

@@ -84,35 +84,42 @@ describe("Given I am connected as an employee", () => {
 
   describe("When I submit the new bill form", () => {
     test("Then Bills page is update with a new bill", async () => {
+      jest.spyOn(mockStore, "bills")
       const newBill = new NewBill ({
-        document, onNavigate, store: mockstore, localStorage: localStorageMock}) 
-        const newBillForm = screen.getByTestId("form-new-bill")
-        const newBillsFormPage = NewBillUI()
-        const billsPage = BillsUI()
-        document.body.innerHTML = newBillsFormPage
-        const billsTable = billsPage.getByTestId("tbody")
-        const createNewBill = {
-          type: "Hôtel et logement",
-          name: "bill test",
-          date: "2020-04-08",
-          amount: 130,
-          pct: 25,
-          file: 'hotel.jpg'
-        }
+        document, onNavigate, store: mockStore, localStorage: localStorageMock}) 
         const submit = jest.fn((e) => newBill.handleSubmit(e))
-        const newDataInStore = await store.post(createNewBill)
-        document.getByTestId("expense-type").value = createNewBill.type
-        document.getByTestId("expense-name").value = createNewBill.name
-        document.getByTestId("datepicker").value = createNewBill.datepicker
-        document.getByTestId("amount").value = createNewBill.amount
-        document.getByTestId("pct").value = createNewBill.pct
-        document.getByTestId("file").value = createNewBill.file       
-        
-        newBillForm.addEventListener("click", submit)
-        userEvent.click(newBillForm)
-        expect(handleSubmit).toHaveBeenCalled()
-       expect(newDataInStore).toBe(createNewBill)
+        const newBillForm = screen.getByTestId("form-new-bill")
+        newBillForm.addEventListener("submit", submit)
+        fireEvent.submit(newBillForm)     
+        expect(submit).toHaveBeenCalled()
+        expect(mockStore.bills).toHaveBeenCalled()
     })
   })
+  describe("When an error occurs on API", () => {
+    test("Post bills from an API and fails with 404 message error", async () => {
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          upload : () =>  {
+            return Promise.reject(new Error("Erreur 404"))
+          }
+        }})
+        const html = BillsUI({error:"Erreur 404"})
+        document.body.innerHTML = html
+        const message = await screen.getByText(/Erreur 404/)
+        expect(message).toBeTruthy()
+    })
+    test("Post messages from an API and fails with 500 message error", async () => {
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          upload : () =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+        }})
+        const html = BillsUI({error:"Erreur 500"})
+        document.body.innerHTML = html
+        const message = await screen.getByText(/Erreur 500/)
+        expect(message).toBeTruthy()
+  })
+})
 })
 })

@@ -54,7 +54,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe('When I click on the icon eye', () => {
-    test('A modal should open', () => {
+    test('Then a modal should open', () => {
       document.body.innerHTML = BillsUI({data: bills})
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -94,30 +94,29 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe('When I click on the icon download', () => {
-    test('downloading with the good URL', () => {
+    test('Then downloading with the good URL', () => {
       document.body.innerHTML = BillsUI({data: bills})
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      
       const billsTable = new Bills({
         document, onNavigate, store: bills, localStorage: window.localStorage
       })
-      const downloadIcon = screen.getAllByTestId('icon-download')[0]
+      const downloadIcon = screen.getAllByTestId('icon-download')[3]
       const handleClickDownload = jest.fn(billsTable.handleClickDownloadFile(downloadIcon))
       const billUrl = downloadIcon.getAttribute("data-bill-url")
-      console.log(billUrl)
-      const urlTest = "http://localhost:5678/public\dc45f22af26fb9fbf8bca13962ce5238"
+      const urlTestMatch = "https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b"
       downloadIcon.addEventListener('click', handleClickDownload)
       userEvent.click(downloadIcon)
       expect(handleClickDownload).toHaveBeenCalled()
+      expect(billUrl).toMatch(urlTestMatch)
    
     })
   })
 
 // integration test GET
   describe("When I navigate to Bills", () => {
-    test("fetches bills from mock API GET", async () => {
+    test("Then fetches bills from mock API GET", async () => {
       localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
       const root = document.createElement("div")
       root.setAttribute("id", "root")
@@ -146,7 +145,7 @@ describe("Given I am connected as an employee", () => {
       document.body.appendChild(root)
       router()
     })
-    test("fetches bills from an API and fails with 404 message error", async () => {
+    test("Then fetches bills from an API and fails with 404 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
@@ -158,7 +157,7 @@ describe("Given I am connected as an employee", () => {
       const message = await screen.getByText(/Erreur 404/)
       expect(message).toBeTruthy()
     })
-    test("fetches messages from an API and fails with 500 message error", async () => {
+    test("Then fetches messages from an API and fails with 500 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
